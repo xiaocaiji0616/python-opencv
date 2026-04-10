@@ -2,3 +2,5 @@ Resources/.DS_Store
 Resources/Scanned/.DS_Store
 .vscode/settings.json
 
+Resources/road_detect_roi_edges.png
+Resources/colorPicker.py
