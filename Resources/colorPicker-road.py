@@ -15,30 +15,30 @@ cv2.createTrackbar("SAT Max","HSV",255,255,empty)
 cv2.createTrackbar("VALUE Max","HSV",255,255,empty)
 
 
-img = cv2.imread('road_image.png')
-imgHsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+img = cv2.imread("Resources/road_detect.png")
+if img is None:
+    raise RuntimeError("图片读取失败，请检查路径 Resources/road_detect.png")
 
-h_min = cv2.getTrackbarPos("HUE Min","HSV")
-h_max = cv2.getTrackbarPos("HUE Max", "HSV")
-s_min = cv2.getTrackbarPos("SAT Min", "HSV")
-s_max = cv2.getTrackbarPos("SAT Max", "HSV")
-v_min = cv2.getTrackbarPos("VALUE Min", "HSV")
-v_max = cv2.getTrackbarPos("VALUE Max", "HSV")
-print(h_min)
+while True:
+    imgHsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-lower = np.array([h_min,s_min,v_min])
-upper = np.array([h_max,s_max,v_max])
-mask = cv2.inRange(imgHsv,lower,upper)
-result = cv2.bitwise_and(img,img, mask = mask)
+    h_min = cv2.getTrackbarPos("HUE Min", "HSV")
+    h_max = cv2.getTrackbarPos("HUE Max", "HSV")
+    s_min = cv2.getTrackbarPos("SAT Min", "HSV")
+    s_max = cv2.getTrackbarPos("SAT Max", "HSV")
+    v_min = cv2.getTrackbarPos("VALUE Min", "HSV")
+    v_max = cv2.getTrackbarPos("VALUE Max", "HSV")
 
-mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
-hStack = np.hstack([img,mask,result])
-    #cv2.imshow('Original', img)
-    #cv2.imshow('HSV Color Space', imgHsv)
-    #cv2.imshow('Mask', mask)
-   #cv2.imshow('Result', result)
-cv2.imshow('Horizontal Stacking', hStack)
+    lower = np.array([h_min, s_min, v_min])
+    upper = np.array([h_max, s_max, v_max])
+    mask = cv2.inRange(imgHsv, lower, upper)
+    result = cv2.bitwise_and(img, img, mask=mask)
 
+    mask_bgr = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
+    hStack = np.hstack([img, mask_bgr, result])
+    cv2.imshow("Horizontal Stacking", hStack)
 
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
 
 cv2.destroyAllWindows()
